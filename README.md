@@ -4,7 +4,7 @@ Production-ready authentication and authorization starter built with NestJS, Pos
 
 ---
 
-## 🚀 Overview
+## Overview
 
 This project demonstrates how to build a secure authentication and authorization system suitable for SaaS applications.
 
@@ -12,7 +12,7 @@ It implements JWT authentication, Role-Based Access Control (RBAC), permission g
 
 ---
 
-## ✨ Features
+## Features
 
 - JWT Authentication
 - Refresh Tokens
@@ -26,19 +26,19 @@ It implements JWT authentication, Role-Based Access Control (RBAC), permission g
 
 ---
 
-## 🔐 Authentication Flow
+## Authentication Flow
 
 (We'll add a diagram later.)
 
 ---
 
-## 🛡 Authorization Flow
+## Authorization Flow
 
 (We'll add another diagram later.)
 
 ---
 
-# 💡 Engineering Decisions
+# Engineering Decisions
 
 This project was intentionally designed using common production patterns rather than the simplest implementation.
 
