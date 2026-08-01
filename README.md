@@ -68,6 +68,7 @@ It implements JWT authentication, Role-Based Access Control (RBAC), permission g
 
 ---
 ## Folder Structure
+```
 src
 ├── auth
 │   ├── controllers
@@ -80,25 +81,34 @@ src
 ├── prisma
 ├── common
 └── config
+```
 ---
 
 
 ---
 ## Authentication Flow
 
-Register
+```
+User Registers
       │
-Password Hashing
+      ▼
+Password Hashed
       │
-Store User
+      ▼
+Saved to Database
       │
-Login
+      ▼
+User Logs In
       │
-Validate Credentials
+      ▼
+Credentials Validated
       │
-Generate JWT
+      ▼
+JWT Generated
       │
-Return Access Token
+      ▼
+Authenticated Request
+```
 ---
 
 
