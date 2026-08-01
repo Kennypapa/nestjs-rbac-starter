@@ -84,22 +84,16 @@ src/
 
 Register
       │
-      ▼
 Password Hashing
       │
-      ▼
 Store User
       │
-      ▼
 Login
       │
-      ▼
 Validate Credentials
       │
-      ▼
 Generate JWT
       │
-      ▼
 Return Access Token
 ---
 
