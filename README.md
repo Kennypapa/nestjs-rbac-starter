@@ -47,22 +47,23 @@ It implements JWT authentication, Role-Based Access Control (RBAC), permission g
 ---
 ## System Architecture
 
-Client
-    │
-    ▼
-Controllers
-    │
-    ▼
-Guards
-    │
-    ▼
-Services
-    │
-    ▼
-Prisma ORM
-    │
-    ▼
-PostgreSQL
+                 Client
+                    │
+                    ▼
+             NestJS Controller
+                    │
+                    ▼
+          Authentication Guards
+                    │
+                    ▼
+               Business Logic
+                 (Services)
+                    │
+                    ▼
+                Prisma ORM
+                    │
+                    ▼
+               PostgreSQL
 ---
 
 ---
