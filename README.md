@@ -201,6 +201,6 @@ RBAC
 Documentation
 Swagger
 
-Language
-TypeScript
+Language 
+Typescript
 ---
