@@ -8,22 +8,39 @@
 ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
+![CI](https://img.shields.io/github/actions/workflow/status/Kennypapa/nestjs-rbac-starter/ci.yml?branch=main&style=for-the-badge&label=CI)
 
-Production-ready NestJS backend starter for SaaS applications featuring JWT authentication, refresh tokens, Role-Based Access Control (RBAC), PostgreSQL, Prisma, Swagger, Docker, CI/CD, and a modular architecture you can extend in real projects.
+A NestJS backend starter that shows how I design authentication, authorization, and API architecture for SaaS-style applications — not just how to wire a tutorial together.
+
+Built with JWT access tokens, rotating refresh tokens, RBAC (roles + permissions), PostgreSQL, Prisma, Swagger, Docker, and GitHub Actions CI.
 
 ---
 
-## Overview
+## Why this project exists
 
-This project demonstrates how to design a secure authentication and authorization backend using patterns common in production SaaS systems:
+Most auth demos stop at “login returns a token.”
 
-- Stateless JWT access tokens
-- Rotating refresh tokens stored as hashes
-- Roles and permissions enforced by guards
-- Type-safe data access with Prisma
-- API docs with Swagger
-- Reproducible local setup with Docker
-- Automated quality checks with GitHub Actions
+This one goes further into the decisions production backends actually need:
+
+- Short-lived access tokens + revocable refresh tokens
+- Authorization that is secure by default
+- Clear module boundaries so features can grow without becoming spaghetti
+- Docs, tests, containers, and CI so the project is runnable and reviewable
+
+If you’re evaluating me as a backend engineer, this repo is meant to answer: *Can this person design and ship a secure API foundation?*
+
+---
+
+## What a recruiter / hiring manager should notice
+
+| Signal | Where it shows up |
+|--------|-------------------|
+| Auth that can scale | Stateless JWT + hashed refresh tokens in Postgres |
+| Real authorization, not role strings only | Roles mapped to `resource:action` permissions |
+| Secure defaults | Global auth guard; public routes opted in with `@Public()` |
+| Clean architecture | Controllers → services → Prisma; feature modules |
+| Production habits | Env validation, DTO validation, exception filter, Docker, CI |
+| Explainable decisions | “Engineering Decisions” section below |
 
 ---
 
@@ -33,174 +50,110 @@ This project demonstrates how to design a secure authentication and authorizatio
 |------|--------|
 | Runtime | Node.js 20 |
 | Framework | NestJS |
-| Language | TypeScript |
+| Language | TypeScript (strict) |
 | Database | PostgreSQL |
 | ORM | Prisma |
 | Auth | JWT + Passport |
-| Docs | Swagger / OpenAPI |
+| Docs | Swagger / OpenAPI (`/docs`) |
 | Containers | Docker + Compose |
-| CI/CD | GitHub Actions |
+| CI | GitHub Actions (lint → test → build) |
 
 ---
 
 ## Features
 
-### Authentication
-- User registration
-- Login
+**Authentication**
+- Register / login / logout
 - JWT access tokens
-- Refresh token rotation
-- Password hashing with bcrypt
-- Logout / token revocation
+- Refresh token rotation (stored hashed)
+- bcrypt password hashing
 
-### Authorization (RBAC)
+**Authorization (RBAC)**
 - Roles: `ADMIN`, `MANAGER`, `USER`
-- Fine-grained permissions (`resource:action`)
-- Global JWT, roles, and permissions guards
-- Custom decorators: `@Public()`, `@Roles()`, `@RequirePermissions()`, `@CurrentUser()`
+- Permissions as `resource:action` (e.g. `users:read`)
+- Guards: JWT → Roles → Permissions
+- Decorators: `@Public()`, `@Roles()`, `@RequirePermissions()`, `@CurrentUser()`
 
-### API & Platform
-- RESTful endpoints
-- Swagger UI at `/docs`
-- DTO validation with `class-validator`
-- Global exception filter
-- Environment validation with Joi
-- Unit tests for auth and guards
+**Platform**
+- Swagger UI
+- Global validation pipe + exception filter
+- Joi environment validation
+- Unit tests for auth + guards
 - Dockerized Postgres + API
-- CI pipeline: install → lint → test → build
+- CI on every push to `main`
 
 ---
 
-## System Architecture
+## Architecture
 
 ```
 Client
   │
   ▼
-NestJS Controller
+Controller
   │
   ▼
-JWT Auth Guard → Roles Guard → Permissions Guard
+JWT Guard → Roles Guard → Permissions Guard
   │
   ▼
-Service Layer (business logic)
+Service (business rules)
   │
   ▼
-Prisma ORM
+Prisma
   │
   ▼
 PostgreSQL
 ```
 
-### Authentication flow
+**Auth flow:** credentials validated → access JWT issued → refresh token hashed & stored → client sends `Authorization: Bearer <token>`
+
+**Authz flow:** authenticate identity → check role (if required) → check permission (if required) → allow / deny
 
 ```
-Register/Login
-    → Validate credentials
-    → Issue short-lived access JWT
-    → Store hashed refresh token
-    → Client sends Bearer access token
-```
-
-### Authorization flow
-
-```
-Incoming request
-    → JWT authentication
-    → Role check (if required)
-    → Permission check (if required)
-    → Allow or deny
+src/
+├── auth           # register, login, refresh, logout, JWT strategy
+├── users          # profile + role assignment
+├── roles          # role management + permission mapping
+├── permissions    # permission catalog
+├── prisma         # database access
+├── common         # guards, decorators, filters
+└── config         # env config + validation
 ```
 
 ---
 
-## Folder Structure
+## Quick start
 
-```
-src
-├── auth            # register, login, refresh, logout, JWT strategy
-├── users           # user profile and role assignment
-├── roles           # role CRUD + permission assignment
-├── permissions     # permission catalog
-├── prisma          # PrismaService (global DB access)
-├── common          # guards, decorators, filters
-└── config          # env config + validation
-```
-
----
-
-## Getting Started
-
-### Prerequisites
-- Node.js 20+
-- Docker (recommended for PostgreSQL)
-
-### 1. Clone and install
+**Prerequisites:** Node.js 20+, Docker
 
 ```bash
-git clone https://github.com/<your-username>/nestjs-rbac-starter.git
+git clone https://github.com/Kennypapa/nestjs-rbac-starter.git
 cd nestjs-rbac-starter
 npm install
-```
-
-### 2. Configure environment
-
-```bash
 cp .env.example .env
-```
-
-### 3. Start PostgreSQL
-
-```bash
 npm run db:up
-```
-
-Postgres is published on host port `5433` by default (avoids conflicts with a local Postgres already using `5432`).
-
-### 4. Run migrations and seed
-
-```bash
 npx prisma migrate dev
 npm run prisma:seed
-```
-
-### 5. Start the API
-
-```bash
 npm run start:dev
 ```
 
-- API: `http://localhost:3000`
-- Swagger: `http://localhost:3000/docs`
+| | |
+|--|--|
+| API | http://localhost:3000 |
+| Swagger | http://localhost:3000/docs |
+| Admin login | `admin@example.com` / `Admin123!` |
 
-### Seed admin account
+> Postgres is mapped to host port **5433** by default so it won’t collide with a local Postgres on `5432`.
 
-| Field | Value |
-|-------|-------|
-| Email | `admin@example.com` |
-| Password | `Admin123!` |
+**One-command stack:**
 
----
-
-## API Endpoints
-
-| Method | Endpoint | Access |
-|--------|----------|--------|
-| GET | `/` | Public health check |
-| POST | `/auth/register` | Public |
-| POST | `/auth/login` | Public |
-| POST | `/auth/refresh` | Public |
-| POST | `/auth/logout` | Public |
-| GET | `/users/me` | Authenticated |
-| GET | `/users` | Admin + `users:read` |
-| GET | `/users/:id` | Admin/Manager + `users:read` |
-| PATCH | `/users/:id/roles` | Admin + `users:manage` |
-| GET/POST | `/roles` | Protected by role + permission |
-| GET/POST | `/permissions` | Protected by role + permission |
+```bash
+docker compose up --build
+```
 
 ---
 
-## Quick Auth Example
+## Try it
 
 ```bash
 # Register
@@ -218,90 +171,93 @@ curl http://localhost:3000/users/me \
   -H "Authorization: Bearer <accessToken>"
 ```
 
+### Main endpoints
+
+| Method | Endpoint | Access |
+|--------|----------|--------|
+| `GET` | `/` | Public health |
+| `POST` | `/auth/register` | Public |
+| `POST` | `/auth/login` | Public |
+| `POST` | `/auth/refresh` | Public |
+| `POST` | `/auth/logout` | Public |
+| `GET` | `/users/me` | Authenticated |
+| `GET` | `/users` | Admin + `users:read` |
+| `PATCH` | `/users/:id/roles` | Admin + `users:manage` |
+| `GET`/`POST` | `/roles` | Role + permission protected |
+| `GET`/`POST` | `/permissions` | Role + permission protected |
+
 ---
 
-## Docker
+## Engineering decisions
 
-Run the full stack:
+**JWT instead of sessions**  
+Keeps the API stateless so multiple instances can authenticate requests without shared session storage.
 
-```bash
-docker compose up --build
+**Refresh tokens (hashed in DB)**  
+Access tokens stay short-lived. Refresh tokens can be rotated and revoked on logout — something pure JWT-only setups usually can’t do cleanly.
+
+**Roles + permissions**  
+Roles alone get brittle (“isManager-ish”). Mapping roles to `resource:action` permissions keeps authorization explicit as the product grows.
+
+**Global guards + `@Public()`**  
+Secure by default. Every route requires auth unless I deliberately open it.
+
+**Prisma**  
+Type-safe queries, reviewable migrations, and a schema that doubles as documentation of the domain model.
+
+---
+
+## Security notes
+
+- Passwords hashed with bcrypt (cost 12)
+- Refresh tokens stored as SHA-256 hashes, never plaintext
+- DTO whitelist validation (`forbidNonWhitelisted`)
+- Env vars validated at startup with Joi
+- Authorization enforced server-side in guards
+- CORS origin configured via environment
+
+---
+
+## CI pipeline
+
+Every push / PR to `main`:
+
+```
+Install → Prisma generate → Lint → Unit tests → Build
 ```
 
-This starts PostgreSQL and the API, applies migrations, seeds roles/permissions, and serves the app on port `3000`.
-
----
-
-## CI/CD
-
-GitHub Actions runs on every push and pull request to `main`:
-
-```
-Checkout
-  → Install dependencies
-  → Generate Prisma Client
-  → Lint
-  → Unit tests
-  → Build
-```
-
-Workflow file: `.github/workflows/ci.yml`
-
----
-
-## Engineering Decisions
-
-### Why JWT instead of sessions?
-JWT keeps authentication stateless, which simplifies horizontal scaling across multiple API instances without shared session storage.
-
-### Why refresh tokens?
-Short-lived access tokens reduce risk if leaked. Refresh tokens are stored hashed in the database so they can be rotated and revoked on logout.
-
-### Why RBAC with permissions?
-Roles alone become inflexible. Mapping roles to `resource:action` permissions keeps authorization explicit and easier to evolve as product features grow.
-
-### Why Prisma?
-Prisma provides type-safe queries, clear migrations, and a schema that documents the domain model for both humans and the application.
-
-### Why global guards + `@Public()`?
-Secure-by-default routing: every endpoint requires authentication unless explicitly marked public.
-
----
-
-## Security Considerations
-
-- Passwords hashed with bcrypt (cost factor 12)
-- Refresh tokens hashed with SHA-256 before storage
-- DTO whitelist validation rejects unexpected fields
-- Environment variables validated at startup
-- Role and permission checks enforced server-side
-- CORS configured via environment
-
----
-
-## Testing
+See [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
 ```bash
 npm test
-npm run test:cov
 npm run lint
 npm run build
 ```
 
-Unit coverage focuses on authentication flows and authorization guards — the highest-risk logic in this starter.
+Tests focus on auth flows and authorization guards — the highest-risk logic in this starter.
 
 ---
 
-## Future Roadmap
+## Screenshots
 
-- Redis caching / token denylist
-- Email verification
-- Password reset
-- OAuth social login
-- Multi-factor authentication
-- Audit logging
+Add these after you capture them (Swagger + a few request/response shots make the repo feel real in under 10 seconds of scrolling):
+
+1. Swagger UI (`/docs`)
+2. Login response with access + refresh tokens
+3. `GET /users/me` with Bearer auth
+4. Forbidden response when a `USER` hits an admin route
+
+---
+
+## What’s next
+
+Intentional follow-ons, not missing homework:
+
 - Rate limiting
-- Multi-tenancy
+- Email verification + password reset
+- Audit logging
+- Redis-backed token denylist
+- Broader integration test suite
 
 ---
 
