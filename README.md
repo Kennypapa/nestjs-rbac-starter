@@ -115,25 +115,24 @@ Authenticated Request
 ---
 ## Authorization Flow
 
-User Registers
-      │
-      ▼
-Password Hashed
-      │
-      ▼
-Saved to Database
-      │
-      ▼
-User Logs In
-      │
-      ▼
-Credentials Validated
-      │
-      ▼
-JWT Generated
-      │
-      ▼
-Authenticated Request
+```
+Incoming Request
+        │
+        ▼
+ JWT Authentication Guard
+        │
+        ▼
+Authenticated User
+        │
+        ▼
+Permission Guard
+        │
+        ▼
+Role & Permission Check
+        │
+        ▼
+ Allow or Deny Access
+```
 ---
 
 
