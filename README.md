@@ -67,15 +67,18 @@ PostgreSQL
 
 ---
 ## Folder Structure
-src/
-
-├── auth/
-├── users/
-├── roles/
-├── permissions/
-├── common/
-├── prisma/
-├── config/
+src
+├── auth
+│   ├── controllers
+│   ├── services
+│   ├── guards
+│   └── dto
+├── users
+├── roles
+├── permissions
+├── prisma
+├── common
+└── config
 ---
 
 
