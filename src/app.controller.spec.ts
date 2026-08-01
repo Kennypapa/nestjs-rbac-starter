@@ -14,9 +14,12 @@ describe('AppController', () => {
     appController = app.get<AppController>(AppController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+  describe('getHealth', () => {
+    it('should return service health status', () => {
+      const result = appController.getHealth();
+      expect(result.status).toBe('ok');
+      expect(result.service).toBe('nestjs-rbac-starter');
+      expect(result.timestamp).toBeDefined();
     });
   });
 });
