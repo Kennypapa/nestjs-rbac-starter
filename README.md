@@ -27,21 +27,6 @@ This one goes further into the decisions production backends actually need:
 - Clear module boundaries so features can grow without becoming spaghetti
 - Docs, tests, containers, and CI so the project is runnable and reviewable
 
-If you’re evaluating me as a backend engineer, this repo is meant to answer: *Can this person design and ship a secure API foundation?*
-
----
-
-## What a recruiter / hiring manager should notice
-
-| Signal | Where it shows up |
-|--------|-------------------|
-| Auth that can scale | Stateless JWT + hashed refresh tokens in Postgres |
-| Real authorization, not role strings only | Roles mapped to `resource:action` permissions |
-| Secure defaults | Global auth guard; public routes opted in with `@Public()` |
-| Clean architecture | Controllers → services → Prisma; feature modules |
-| Production habits | Env validation, DTO validation, exception filter, Docker, CI |
-| Explainable decisions | “Engineering Decisions” section below |
-
 ---
 
 ## Tech Stack
