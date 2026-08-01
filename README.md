@@ -1,6 +1,6 @@
 # NestJS RBAC Starter
 
-Production-ready authentication and authorization starter built with NestJS, PostgreSQL, JWT, Prisma and Swagger.
+Production-ready authentication and authorization backend demonstrating scalable software architecture, JWT authentication, Role-Based Access Control (RBAC), PostgreSQL, Prisma ORM, and engineering practices commonly used in modern SaaS applications.
 
 ---
 ## Overview
@@ -8,6 +8,28 @@ Production-ready authentication and authorization starter built with NestJS, Pos
 This project demonstrates how to build a secure authentication and authorization system suitable for SaaS applications.
 
 It implements JWT authentication, Role-Based Access Control (RBAC), permission guards, and a scalable backend architecture that can serve as a foundation for production systems.
+---
+
+---
+## Tech Stack
+Backend
+NestJS
+Node.js
+
+Database
+PostgreSQL
+Prisma
+
+Authentication
+JWT
+RBAC
+
+Documentation
+Swagger
+---
+
+Language 
+Typescript
 ---
 
 ---
@@ -158,14 +180,55 @@ JWT keeps the API stateless, making it easier to scale across multiple applicati
 ---
 
 ---
-## Future Improvements
+## Production Considerations
+
+- Environment-based configuration
+- Password hashing using bcrypt
+- JWT authentication
+- Role-Based Access Control (RBAC)
+- Global exception handling
+- DTO validation
+- Input sanitization
+- API documentation with Swagger
+---
+
+---
+## Design Principles
+
+- Separation of Concerns
+- Dependency Injection
+- Single Responsibility Principle
+- Stateless Authentication
+- Modular Architecture
+- Type Safety
+- Security by Default
+---
+
+---
+## Scalability
+
+The architecture is designed to support future growth through:
+
+- Modular services
+- Stateless JWT authentication
+- PostgreSQL relational modeling
+- Separation of business logic
+- Independent feature modules
+---
+
+---
+## Future Roadmap
+
 - Redis Caching
+- Background Jobs
 - Email Verification
 - Password Reset
-- Audit Logs
-- OAuth
+- OAuth Login
 - Multi-Factor Authentication
-- Background Jobs
+- Audit Logging
+- Rate Limiting
+- Docker Support
+- CI/CD Pipeline
 ---
 
 
@@ -184,23 +247,4 @@ POST /roles
 POST /permissions
 ---
 
----
-## Tech Stack
-Backend
-NestJS
-Node.js
-
-Database
-PostgreSQL
-Prisma
-
-Authentication
-JWT
-RBAC
-
-Documentation
-Swagger
-
-Language 
-Typescript
 ---
