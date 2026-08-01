@@ -105,22 +105,25 @@ Return Access Token
 ---
 ## Authorization Flow
 
-Incoming Request
-        │
-        ▼
-JWT Guard
-        │
-        ▼
-Authenticated User
-        │
-        ▼
-Permission Guard
-        │
-        ▼
-Role Check
-        │
-        ▼
-Allow / Deny Access
+User Registers
+      │
+      ▼
+Password Hashed
+      │
+      ▼
+Saved to Database
+      │
+      ▼
+User Logs In
+      │
+      ▼
+Credentials Validated
+      │
+      ▼
+JWT Generated
+      │
+      ▼
+Authenticated Request
 ---
 
 
