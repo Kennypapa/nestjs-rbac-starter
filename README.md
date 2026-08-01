@@ -3,41 +3,131 @@
 Production-ready authentication and authorization starter built with NestJS, PostgreSQL, JWT, Prisma and Swagger.
 
 ---
-
 ## Overview
 
 This project demonstrates how to build a secure authentication and authorization system suitable for SaaS applications.
 
 It implements JWT authentication, Role-Based Access Control (RBAC), permission guards, and a scalable backend architecture that can serve as a foundation for production systems.
-
 ---
 
-## Features
+---
+## System Features
+
+### Authentication
 
 - JWT Authentication
 - Refresh Tokens
-- RBAC
+- Password Hashing
+- DTO Validation
+
+### Authorization
+
+- Role-Based Access Control (RBAC)
 - Permission Guards
+- Route Protection
+
+### Database
+
 - PostgreSQL
 - Prisma ORM
-- Swagger API Documentation
-- DTO Validation
-- Global Exception Filters
 
+### API
+
+- Swagger Documentation
+- Global Exception Filters
+- RESTful API Design
+
+### Developer Experience
+
+- Environment Variables
+- Type-safe Database Queries
+- Modular Architecture
 ---
 
+---
+## System Architecture
+
+Client
+    │
+    ▼
+Controllers
+    │
+    ▼
+Guards
+    │
+    ▼
+Services
+    │
+    ▼
+Prisma ORM
+    │
+    ▼
+PostgreSQL
+---
+
+---
+## Folder Structure
+src/
+
+├── auth/
+├── users/
+├── roles/
+├── permissions/
+├── common/
+├── prisma/
+├── config/
+---
+
+
+---
 ## Authentication Flow
 
-(We'll add a diagram later.)
-
+Register
+      │
+      ▼
+Password Hashing
+      │
+      ▼
+Store User
+      │
+      ▼
+Login
+      │
+      ▼
+Validate Credentials
+      │
+      ▼
+Generate JWT
+      │
+      ▼
+Return Access Token
 ---
 
+
+---
 ## Authorization Flow
 
-(We'll add another diagram later.)
-
+Incoming Request
+        │
+        ▼
+JWT Guard
+        │
+        ▼
+Authenticated User
+        │
+        ▼
+Permission Guard
+        │
+        ▼
+Role Check
+        │
+        ▼
+Allow / Deny Access
 ---
 
+
+
+---
 # Engineering Decisions
 
 This project was intentionally designed using common production patterns rather than the simplest implementation.
@@ -45,58 +135,62 @@ This project was intentionally designed using common production patterns rather 
 ### Why JWT instead of Sessions?
 
 JWT keeps the API stateless, making it easier to scale across multiple application instances without relying on server-side session storage.
-
 ---
 
-### Why Guards instead of Middleware?
-
-Authentication determines who the user is.
-
-Authorization determines what the user can access.
-
-Guards execute after authentication and have access to route metadata, making them the right place for permission checks.
 
 ---
-
-### Why RBAC instead of hardcoded role checks?
-
-Permissions evolve over time.
-
-Using decorators and guards allows new roles and permissions to be added without changing controller logic.
-
+## Security Considerations
+- Passwords are hashed before storage.
+- JWT protects authenticated routes.
+- RBAC prevents unauthorized access.
+- DTO validation prevents invalid requests.
+- Environment variables store sensitive credentials.
 ---
 
-### Why PostgreSQL?
-
-The authorization model relies on relational data such as:
-
-- Users
-- Roles
-- Permissions
-- Workspaces
-- Memberships
-
-PostgreSQL handles these relationships efficiently while maintaining strong data integrity.
-
+---
+## Future Improvements
+- Redis Caching
+- Email Verification
+- Password Reset
+- Audit Logs
+- OAuth
+- Multi-Factor Authentication
+- Background Jobs
 ---
 
-### Why Prisma?
-
-Prisma provides:
-
-- Type safety
-- Cleaner database queries
-- Easier schema evolution
-- Better developer experience
 
 ---
+## API Endpoints
+POST /auth/register
 
-### Trade-offs
+POST /auth/login
 
-JWT introduces challenges around token invalidation.
+POST /auth/refresh
 
-RBAC becomes more complex as permission requirements grow.
+GET /users
 
-PostgreSQL schemas require more upfront planning than NoSQL databases.
+POST /roles
 
-These trade-offs were considered acceptable in exchange for stronger security, maintainability, and scalability.
+POST /permissions
+---
+
+---
+## Tech Stack
+Backend
+NestJS
+Node.js
+
+Database
+PostgreSQL
+Prisma
+
+Authentication
+JWT
+RBAC
+
+Documentation
+Swagger
+
+Language
+TypeScript
+---
